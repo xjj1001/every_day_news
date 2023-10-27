@@ -38,7 +38,7 @@ jobs:
         uses: EndBug/add-and-commit@v4
         with: 
           author_name: xjj1001
-          author_email: example@qq.com
+          author_email: 347299381@qq.com
           message: "feat: save add.csv"
           add: "."
         env:
