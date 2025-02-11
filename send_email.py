@@ -6,6 +6,8 @@ smtp_server = "smtp.gmail.com"
 USER_EMAIL = os.environ.get("USER_EMAIL")
 USER_PASSWORD = os.environ.get("USER_PASSWORD")
 
+print(USER_EMAIL, USER_PASSWORD)
+
 message = """\
     Subject: Welcome Ubaydah
 
