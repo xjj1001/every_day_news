@@ -7,4 +7,4 @@ curl -o v2ex.html https://v2ex.com
 git status
 git add add.csv
 
-python send_email.py
+# python send_email.py
