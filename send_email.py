@@ -23,7 +23,7 @@ html_msg = """
  
 # 创建一个实例msg
 msg = MIMEMultipart()
-msg['From'] = '"John Doe" <xxx>' # 发送者
+msg['From'] = f'"xujianjun" <{from_addr}>' # 发送者
 msg['To'] = Header('到点就困告')  # 接收者
 subject = 'steam今日促销'
 msg['Subject'] = Header(subject, 'utf-8')  # 邮件主题
