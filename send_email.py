@@ -1,5 +1,5 @@
 # smtplib 用于邮件的发信动作
-import smtplib
+import smtplib, os
 # email 用于构建邮件内容
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
