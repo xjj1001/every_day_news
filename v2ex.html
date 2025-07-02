@@ -33,7 +33,7 @@
             font-family: "Helvetica Neue", "Luxi Sans", "Segoe UI", "Hiragino Sans GB", "Microsoft Yahei", sans-serif, "Apple Logo";
         }
     </style>
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/85b367ef0f2e5434d88de0b2a2b68e57ed94bc85-combo.css?t=1751332200">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/85b367ef0f2e5434d88de0b2a2b68e57ed94bc85-combo.css?t=1751418000">
     
     <script>
         const SITE_NIGHT = 0;
@@ -54,7 +54,7 @@
         const LANG = 'zhcn';
         const FEATURES = ['search', 'favorite-nodes-sort'];
     </script>
-    <script src="/assets/c6779a5a9c71a4b276c2d09acc592afe2da2cacf-combo.js?t=1751332200" defer></script>
+    <script src="/assets/c6779a5a9c71a4b276c2d09acc592afe2da2cacf-combo.js?t=1751418000" defer></script>
     <meta name="description" content="创意工作者的社区。讨论编程、设计、硬件、游戏等令人激动的话题。">
     
     <link rel="alternate" type="application/atom+xml" href="/feed/tab/tech.xml">
@@ -181,20 +181,134 @@ for (link in links) {
 
                     
                     <div class="sep20"></div>
-                    <div class="box">
-<div class="inner">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5060390720525238"
-     crossorigin="anonymous"></script>
-<!-- v2ex250x250 -->
-<ins class="adsbygoogle"
-     style="display:block;width:250px;height:250px;vertical-align:bottom;"
-     data-ad-client="ca-pub-5060390720525238"
-     data-ad-slot="1882752210"></ins>
+                    <div class="box" id="pro-campaign-container">
+    <!-- Campaign content will be loaded here -->
+</div>
+
 <script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to escape HTML entities
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Function to render campaign based on display format
+    function renderCampaign(campaign) {
+        let html = '';
+        let displayFormat = campaign.display_format || 'text-only';
+        let title = escapeHtml(campaign.title);
+        let description = escapeHtml(campaign.description);
+        let callToAction = escapeHtml(campaign.call_to_action);
+        let link = escapeHtml(campaign.link);
+
+        // Check if required image URL is available for the display format, fallback to text-only if not
+        if (displayFormat === 'small-with-description' && !campaign.img_small_url) {
+            displayFormat = 'text-only';
+        } else if (displayFormat === 'banner-only' && !campaign.img_banner_url) {
+            displayFormat = 'text-only';
+        } else if ((displayFormat === 'big-only' || displayFormat === 'big-with-description' || displayFormat === 'big-with-title-description-button') && !campaign.img_big_url) {
+            displayFormat = 'text-only';
+        }
+
+        html = `<div class="pro-unit-title">${title}</div>`;
+        switch(displayFormat) {
+            case 'text-only':
+                html += `
+                    <div class="pro-unit">
+                    <div class="pro-unit-description flex-one-row gap10">
+                        <div onclick="window.open('${link}', '_blank')">${description}</div>
+                        <div><a href="${link}" class="pro-unit-go" target="_blank">›</a>
+                        </div>
+                    </div>
+                    </div>
+                `;
+                break;
+
+            case 'small-with-description':
+                html += `<div class="pro-unit flex-one-row">
+                    ${campaign.img_small_cid ? `<div class="pro-unit-small-image">
+                        <a href="${link}" target="_blank"><img src="${campaign.img_small_url}" class="pro-unit-img" style="max-width: 130px; max-height: 100px;" /></a>
+                    </div>` : ''}
+                    <div onclick="window.open('${link}', '_blank')" class="pro-unit-description">${description}</div>
+                </div>`;
+                break;
+
+            case 'banner-only':
+                html += `<div class="cell"><a href="${link}" target="_blank"><img src="${campaign.img_banner_url}" class="pro-unit-img" style="max-width: 250px; max-height: 60px; display: block; vertical-align: bottom;" /></a></div>`;
+                break;
+
+            case 'big-only':
+                html += `<div class="cell"><a href="${link}" target="_blank"><img src="${campaign.img_big_url}" class="pro-unit-img" style="max-width: 500px; max-height: 500px; width: 100%; display: block; vertical-align: bottom;" /></a></div>`;
+                break;
+
+            case 'big-with-description':
+                html += `<div class="inner" style="padding-bottom: 0px;"><a href="${link}" target="_blank"><img src="${campaign.img_big_url}" class="pro-unit-img" style="max-width: 500px; max-height: 500px; width: 100%; display: block; vertical-align: bottom;" /></a></div>`;
+                html += `<div class="pro-unit-description flex-one-row gap10">
+                    <div onclick="window.open('${link}', '_blank')">${description}</div>
+                    <div><a href="${link}" class="pro-unit-go" target="_blank">›</a></div></div>`;
+                break;
+
+            case 'big-with-title-description-button':
+                html += `<div class="inner" style="padding-bottom: 0px;"><a href="${link}" target="_blank"><img src="${campaign.img_big_url}" class="pro-unit-img" style="max-width: 500px; max-height: 500px; width: 100%; display: block; vertical-align: bottom;" /></a></div>`;
+                html += `<div class="pro-unit-description">
+                    <div style="text-align: center" onclick="window.open('${link}', '_blank')">${description}</div>
+                    </div>`;
+                html += `<div class="pro-unit-cta-container"><a href="${link}" target="_blank" class="pro-unit-cta">${callToAction}</a></div>`;
+                break;
+
+            default:
+                html += `
+                    <div class="pro-unit-description flex-one-row gap10">
+                        <div onclick="window.open('${link}', '_blank')">${description}</div>
+                        <div><a href="${link}" class="pro-unit-go" target="_blank">›</a></div>
+                    </div>
+                `;
+        }
+
+        html += `<div class="pro-unit-from flex-one-row gap10">
+        <div>Promoted by <a href="/member/${campaign.member.username}" target="_blank">${campaign.member.username}</a></div>
+        <div><a href="/pro/about" target="_blank" class="fade"><i class="fa fa-question-circle fade"></i> <span style="font-size: 12px; color: var(--color-fade)">PRO</span></a></div>
+        </div>`
+
+        return html;
+    }
+
+    // Load campaign from emitter
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/pro/emitter', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                try {
+                    var campaign = JSON.parse(xhr.responseText);
+                    if (campaign && campaign.id) {
+                        var html = renderCampaign(campaign);
+                        document.getElementById('pro-campaign-container').innerHTML = html;
+                    } else {
+                        // No campaign to display, hide the container
+                        document.getElementById('pro-campaign-container').style.display = 'none';
+                    }
+                } catch (e) {
+                    // Parse error, hide the container
+                    document.getElementById('pro-campaign-container').style.display = 'none';
+                    console.log('Error parsing campaign data: ' + e.message);
+                }
+            } else {
+                // HTTP error, hide the container
+                document.getElementById('pro-campaign-container').style.display = 'none';
+                console.log('Error loading campaign: HTTP ' + xhr.status);
+            }
+        }
+    };
+
+    xhr.send();
+});
 </script>
-</div>
-</div>
                     <div class="sep20"></div>
                     
                     
@@ -207,144 +321,128 @@ for (link in links) {
 <div class="box" id="TopicsHot">
     <div class="cell"><span class="fade">今日热议主题</span></div>
     
-    <div class="cell from_253550 hot_t_1141915">
+    <div class="cell from_173099 hot_t_1142148">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/gzd1214"><img src="https://cdn.v2ex.com/avatar/1e75/7158/253550_normal.png?m=1702783564" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="gzd1214" /></a>
+                <a href="/member/zhixiao"><img src="https://cdn.v2ex.com/gravatar/21b0d80b26267315c15dd76f22bac462?s=24&d=retro" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="zhixiao" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141915">结婚 7 年，孩子 2 岁，情绪价值和现实压力把我逼到崩溃边缘</a>
+                <a href="/t/1142148">[官方优惠] 免费兑换一年 jetbrain all products</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_301151 hot_t_1141868">
+    <div class="cell from_726911 hot_t_1142218">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/johnlin"><img src="https://cdn.v2ex.com/gravatar/797de564ba63fdaff23bb4f6427bc809?s=24&d=retro" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="johnlin" /></a>
+                <a href="/member/OrionRies"><img src="https://cdn.v2ex.com/avatar/9094/d5b5/726911_normal.png?m=1750602458" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="OrionRies" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141868">记录最近一次看病经历，小病熬成大问题，看病真难</a>
+                <a href="/t/1142218">超适合 V2EX 和 B 站的插件，看文章/刷帖子/看视频的时候就能不断拓展英语词汇，主打一个“无痛”~（送会员）</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_412872 hot_t_1141912">
+    <div class="cell from_198113 hot_t_1142277">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/fenddddddda"><img src="https://cdn.v2ex.com/avatar/e9a2/8574/412872_normal.png?m=1751253501" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="fenddddddda" /></a>
+                <a href="/member/HAWKS"><img src="https://cdn.v2ex.com/avatar/c319/e6a9/198113_normal.png?m=1751377150" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="HAWKS" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141912">最近 YU7 销量这么高，为什么这么多人买车？真的有用车需求？</a>
+                <a href="/t/1142277">28.8 彩礼钱 +60-80w 代孕费 +孩子要跟她姓 这个局怎么破</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_425707 hot_t_1141925">
+    <div class="cell from_470499 hot_t_1142228">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/anoyi"><img src="https://cdn.v2ex.com/avatar/6f53/b60c/425707_normal.png?m=1751268734" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="anoyi" /></a>
+                <a href="/member/vanchKong"><img src="https://cdn.v2ex.com/gravatar/ad82bba4cc0b99618b26ca092b7b7eeb?s=24&d=retro" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="vanchKong" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141925">AI 炒股，喜提一个涨停 😄</a>
+                <a href="/t/1142228">观「	中医治好了我」有感</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_632559 hot_t_1141974">
+    <div class="cell from_186385 hot_t_1142172">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/cheap"><img src="https://cdn.v2ex.com/avatar/1ca7/64cd/632559_normal.png?m=1747546541" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="cheap" /></a>
+                <a href="/member/qppq54s"><img src="https://cdn.v2ex.com/avatar/c25a/e8f4/186385_normal.png?m=1732243365" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="qppq54s" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141974">突然发现一到节假日朋友圈几乎都是女的刷屏秀旅游，商场消费的也大多都是女的，餐厅也是女的消费为主</a>
+                <a href="/t/1142172">小公司老板想要搞低代码/无代码，怎么说服他放弃</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_411532 hot_t_1141945">
+    <div class="cell from_444925 hot_t_1142206">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/clacf"><img src="https://cdn.v2ex.com/gravatar/9a5af21f8dc33efc660faf5fb6b18aff?s=24&d=retro" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="clacf" /></a>
+                <a href="/member/jadelike"><img src="https://cdn.v2ex.com/avatar/026d/6aa0/444925_normal.png?m=1751341243" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="jadelike" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141945">全麻的感觉和穿越时空是一样的</a>
+                <a href="/t/1142206">华为海思 21 级大佬周日发帖总结主动管理 OD</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_466174 hot_t_1141895">
+    <div class="cell from_531551 hot_t_1142160">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/ODESZA"><img src="https://cdn.v2ex.com/avatar/3c0b/7be8/466174_normal.png?m=1605682853" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="ODESZA" /></a>
+                <a href="/member/sundawang"><img src="https://cdn.v2ex.com/gravatar/0357fa5ee0e43eb0bb56af51c9d50b95?s=24&d=retro" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="sundawang" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141895">来帮大家治疗下低血压</a>
+                <a href="/t/1142160">我现在这个情况需要买车吗？</a>
                 </span>
             </td>
         </tr>
     </table>
     </div>
 
-    <div class="cell from_111461 hot_t_1141897">
+    <div class="cell from_344778 hot_t_1142211">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="24" valign="middle" align="center">
-                <a href="/member/Lorneeeee"><img src="https://cdn.v2ex.com/avatar/7590/8e2e/111461_normal.png?m=1469504159" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="Lorneeeee" /></a>
+                <a href="/member/Tumblr"><img src="https://cdn.v2ex.com/avatar/3122/ad46/344778_normal.png?m=1667449277" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="Tumblr" /></a>
             </td>
             <td width="10"></td>
             <td width="auto" valign="middle">
                 <span class="item_hot_topic_title">
-                <a href="/t/1141897">今天早上吃饭把牙齿给蹦了 大家有种植牙的经历吗？</a>
-                </span>
-            </td>
-        </tr>
-    </table>
-    </div>
-
-    <div class="cell from_676528 hot_t_1142043">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            <td width="24" valign="middle" align="center">
-                <a href="/member/hellolinuxer"><img src="https://cdn.v2ex.com/avatar/763c/5a03/676528_normal.png?m=1708569178" class="avatar" border="0" align="default" width="24" style="width: 24px; max-height: 24px;" alt="hellolinuxer" /></a>
-            </td>
-            <td width="10"></td>
-            <td width="auto" valign="middle">
-                <span class="item_hot_topic_title">
-                <a href="/t/1142043">如何看待“穷人最大的陷阱——就是不停地学习”这句话？</a>
+                <a href="/t/1142211">公积金结息了，你的利息有多少？</a>
                 </span>
             </td>
         </tr>
@@ -372,9 +470,9 @@ for (link in links) {
         <span style="flex: 1;">Site of the Day</span>
     </div>
     <div class="cell flex-one-row" style="gap: 5px;">
-        <div style="flex: 1;" class="f16"><a href="https://www.aciuz.com/" target="_blank">湛蓝天空</a></div>
-        <span class="f12 fade">11 篇文章</span>
-        <a href="https://www.aciuz.com/feed" target="_blank"><img src="/static/img/rss@2x.png" width="16" style="display: block" alt="feed address" border="0" /></a>
+        <div style="flex: 1;" class="f16"><a href="https://chengpeiquan.com/" target="_blank">程沛权 - 养了三只猫</a></div>
+        <span class="f12 fade">97 篇文章</span>
+        <a href="https://chengpeiquan.com/feed.xml" target="_blank"><img src="/static/img/rss@2x.png" width="16" style="display: block" alt="feed address" border="0" /></a>
     </div>
 </div>
 
@@ -392,15 +490,15 @@ for (link in links) {
         <table cellpadding="5" cellspacing="0" border="0" width="100%">
             <tr>
                 <td width="60" align="right"><span class="gray">注册会员</span></td>
-                <td width="auto" align="left"><strong>755,190</strong></td>
+                <td width="auto" align="left"><strong>755,380</strong></td>
             </tr>
             <tr>
                 <td width="60" align="right"><span class="gray">主题</span></td>
-                <td width="auto" align="left"><strong>1,142,122</strong></td>
+                <td width="auto" align="left"><strong>1,142,384</strong></td>
             </tr>
             <tr>
                 <td width="60" align="right"><span class="gray">回复</span></td>
-                <td width="auto" align="left"><strong>16,435,992</strong></td>
+                <td width="auto" align="left"><strong>16,441,507</strong></td>
             </tr>
         </table>
     </div>
@@ -439,16 +537,476 @@ for (link in links) {
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             
-            <td width="48" valign="top" align="center"><a href="/member/xabclink"><img src="https://cdn.v2ex.com/avatar/d5ba/2dd0/624318_xlarge.png?m=1749866938" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="xabclink" /></a></td>
+            <td width="48" valign="top" align="center"><a href="/member/qppq54s"><img src="https://cdn.v2ex.com/avatar/c25a/e8f4/186385_xlarge.png?m=1732243365" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="qppq54s" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142094#reply26" class="topic-link" id="topic-link-1142094">看到一些 github 项目作者,总是千方百计利诱网友给予 star</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142172#reply100" class="topic-link" id="topic-link-1142172">小公司老板想要搞低代码/无代码，怎么说服他放弃</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/xabclink">xabclink</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:13:04 +08:00">2 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/wlingxiao">wlingxiao</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/qppq54s">qppq54s</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 09:06:07 +08:00">1 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/dcdlove">dcdlove</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1142094#reply26" class="count_livid">26</a>
+                <a href="/t/1142172#reply100" class="count_livid">100</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/todshen"><img src="https://cdn.v2ex.com/avatar/f22c/f263/153459_large.png?m=1750817340" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="todshen" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142357#reply5" class="topic-link" id="topic-link-1142357">Nas 设备求推荐</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/todshen">todshen</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:43:20 +08:00">24 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/zwczou">zwczou</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142357#reply5" class="count_livid">5</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/jianing831"><img src="https://cdn.v2ex.com/gravatar/9d3c6350ac2d5e6e93b654061fd91b0f?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="jianing831" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142366#reply4" class="topic-link" id="topic-link-1142366">开发一款轻便简洁的论坛程序</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/vue">Vue.js</a> &nbsp;•&nbsp; <strong><a href="/member/jianing831">jianing831</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 02:08:29 +08:00">6 小时 59 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/jianing831">jianing831</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142366#reply4" class="count_livid">4</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/zw2019"><img src="https://cdn.v2ex.com/avatar/7296/b175/414185_large.png?m=1573713224" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="zw2019" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142295#reply15" class="topic-link" id="topic-link-1142295">公积金利息到账了，想买个硬盘柜。</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/zw2019">zw2019</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 07:58:56 +08:00">1 小时 9 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/zw2019">zw2019</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142295#reply15" class="count_livid">15</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/beyondstars"><img src="https://cdn.v2ex.com/avatar/c417/2dec/485202_large.png?m=1745861094" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="beyondstars" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142352#reply5" class="topic-link" id="topic-link-1142352">古早数字生活方式梦核</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;1 &nbsp;&nbsp; </div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/beyondstars">beyondstars</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:45:21 +08:00">22 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/chendy">chendy</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142352#reply5" class="count_livid">5</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/LxnChan"><img src="https://cdn.v2ex.com/gravatar/c27d945d034f2da687304f5ec6dab8ec?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="LxnChan" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142199#reply52" class="topic-link" id="topic-link-1142199">求 Linux 访问外网的解决办法</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/linux">Linux</a> &nbsp;•&nbsp; <strong><a href="/member/LxnChan">LxnChan</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:39:06 +08:00">28 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/v2er119">v2er119</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142199#reply52" class="count_livid">52</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/developerupup"><img src="https://cdn.v2ex.com/gravatar/f352a520f3f5e4ddebce7736b6335ef6?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="developerupup" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142252#reply15" class="topic-link" id="topic-link-1142252">请教大佬入门的备份方案</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/developerupup">developerupup</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:23:54 +08:00">44 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/BlueSkyXN">BlueSkyXN</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142252#reply15" class="count_livid">15</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/SIFT2009"><img src="https://cdn.v2ex.com/avatar/b5e6/dcaf/81053_large.png?m=1751380474" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="SIFT2009" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142348#reply0" class="topic-link" id="topic-link-1142348">sagesai: 10 倍提升 devops 效率</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/SIFT2009">SIFT2009</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 22:40:14 +08:00">10 小时 27 分钟前</span></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/dearzhzhao"><img src="https://cdn.v2ex.com/avatar/df9d/4261/527193_large.png?m=1751296965" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="dearzhzhao" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142123#reply69" class="topic-link" id="topic-link-1142123">Java 开发者无痛迁移到 Cursor 开启 AI 编程新生涯</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;1 &nbsp;&nbsp; </div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/dearzhzhao">dearzhzhao</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 21:57:55 +08:00">11 小时 10 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/dddd1919">dddd1919</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142123#reply69" class="count_livid">69</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/zwjsoftx"><img src="https://cdn.v2ex.com/avatar/78b4/0d53/440365_xlarge.png?m=1751337416" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="zwjsoftx" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142168#reply20" class="topic-link" id="topic-link-1142168">工作需要，搞了一个将罗马数字与为阿拉伯数字互换的网站，求指教</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/zwjsoftx">zwjsoftx</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 21:20:37 +08:00">11 小时 47 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/ob616">ob616</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142168#reply20" class="count_livid">20</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/sky3hao9"><img src="https://cdn.v2ex.com/gravatar/d8a675a3d500f5eec9e907f3595fd59c?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="sky3hao9" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142189#reply30" class="topic-link" id="topic-link-1142189">相信百年之后你我的肉身终将陨灭, 而我们的精神和梦想, 依然可以在代码中相见</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/sky3hao9">sky3hao9</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:55:38 +08:00">12 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/knightgao2">knightgao2</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142189#reply30" class="count_livid">30</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/wqkenqing"><img src="https://cdn.v2ex.com/gravatar/b4e43dfae7364ea1256d1b9c66128cf3?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="wqkenqing" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142141#reply17" class="topic-link" id="topic-link-1142141">[obsidan] 苹果多端设备 markdown 文本的同步问题。</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/wqkenqing">wqkenqing</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:05:29 +08:00">1 小时 2 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/SenLief">SenLief</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142141#reply17" class="count_livid">17</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/Need4more"><img src="https://cdn.v2ex.com/gravatar/e538146cc297132485054c292f82ada1?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Need4more" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142293#reply5" class="topic-link" id="topic-link-1142293">轻量级 k8s： uncloud</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/Need4more">Need4more</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 01:13:11 +08:00">7 小时 54 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/drymonfidelia">drymonfidelia</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142293#reply5" class="count_livid">5</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/OBJECTION"><img src="https://cdn.v2ex.com/gravatar/6eec09bcb6ea9e653ab7cc4f45ad6027?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="OBJECTION" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142190#reply21" class="topic-link" id="topic-link-1142190">防火墙 代理问题</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/OBJECTION">OBJECTION</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 03:35:10 +08:00">5 小时 32 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Morgan2">Morgan2</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142190#reply21" class="count_livid">21</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/Vaspike"><img src="https://cdn.v2ex.com/avatar/4324/ec1f/574804_xlarge.png?m=1744726756" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Vaspike" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142163#reply13" class="topic-link" id="topic-link-1142163">[开源工具]macOS 原生中文输入法下使用英文标点符号</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/Vaspike">Vaspike</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 02:35:10 +08:00">6 小时 32 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Vaspike">Vaspike</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142163#reply13" class="count_livid">13</a>
                 
             </td>
         </tr>
@@ -475,211 +1033,13 @@ for (link in links) {
             <td width="48" valign="top" align="center"><a href="/member/Jimmyisme"><img src="https://cdn.v2ex.com/avatar/9f86/e3be/590960_xlarge.png?m=1751259311" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Jimmyisme" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141940#reply23" class="topic-link" id="topic-link-1141940">TrueNAS 寄了，被家里人习惯性关插头电源了</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141940#reply40" class="topic-link" id="topic-link-1141940">TrueNAS 寄了，被家里人习惯性关插头电源了</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/Jimmyisme">Jimmyisme</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 04:27:57 +08:00">4 小时 47 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Donahue">Donahue</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/Jimmyisme">Jimmyisme</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 15:13:36 +08:00">17 小时 54 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/HTravel">HTravel</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1141940#reply23" class="count_livid">23</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/huangxd007"><img src="https://cdn.v2ex.com/gravatar/09cf79ea6d9e6af2ef62b27b46b08157?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="huangxd007" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142075#reply7" class="topic-link" id="topic-link-1142075">请教各位佬一个 moviepilot 的问题</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/huangxd007">huangxd007</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:04:15 +08:00">11 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/mulychou">mulychou</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142075#reply7" class="count_livid">7</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/ioooori"><img src="https://cdn.v2ex.com/avatar/f0ac/921f/635515_xlarge.png?m=1702973012" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ioooori" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142066#reply20" class="topic-link" id="topic-link-1142066">clash 开了系统代理以后，所有和微软有关的服务都登录不了， edge 账号登陆、Vscode 同步等，有需要什么特别设置的吗？</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/ioooori">ioooori</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:09:14 +08:00">6 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/test00001">test00001</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142066#reply20" class="count_livid">20</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/cnbatch"><img src="https://cdn.v2ex.com/gravatar/7eb06cdf719fb364a1dfbbaefc4f9d36?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="cnbatch" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142106#reply3" class="topic-link" id="topic-link-1142106">有篇 2021 年的文章说 epoll 早于 kqueue，我的同事差点被误导</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/cnbatch">cnbatch</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:15:10 +08:00">几秒前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/picone">picone</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142106#reply3" class="count_livid">3</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/abbychau"><img src="https://cdn.v2ex.com/gravatar/17623b699060c78823d7d6c95d1de7ec?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="abbychau" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142073#reply3" class="topic-link" id="topic-link-1142073">跨平台的 MySQL Parser</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/mysql">MySQL</a> &nbsp;•&nbsp; <strong><a href="/member/abbychau">abbychau</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 08:00:16 +08:00">1 小时 15 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/abbychau">abbychau</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142073#reply3" class="count_livid">3</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/tfu"><img src="https://cdn.v2ex.com/gravatar/207e6df4e8ca663dbd948ff8eac25b6e?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="tfu" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142029#reply9" class="topic-link" id="topic-link-1142029">OpenAI 是没钱买代理服务器吗？竟然来白嫖我的 GitHub/ArXiv 镜像服务器爬取数据用于训练 GPT</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/tfu">tfu</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 08:39:51 +08:00">35 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/since2021">since2021</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142029#reply9" class="count_livid">9</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/HeyCaptainJack"><img src="https://cdn.v2ex.com/avatar/96d2/ff23/557305_xlarge.png?m=1729300553" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="HeyCaptainJack" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142093#reply1" class="topic-link" id="topic-link-1142093">Dokploy 用了一段时间，确实好使</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/HeyCaptainJack">HeyCaptainJack</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 01:01:52 +08:00">8 小时 13 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Tink">Tink</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142093#reply1" class="count_livid">1</a>
+                <a href="/t/1141940#reply40" class="count_livid">40</a>
                 
             </td>
         </tr>
@@ -706,13 +1066,13 @@ for (link in links) {
             <td width="48" valign="top" align="center"><a href="/member/Misty99"><img src="https://cdn.v2ex.com/avatar/d289/9a02/568138_xlarge.png?m=1744520998" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Misty99" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142096#reply2" class="topic-link" id="topic-link-1142096">胡思乱想（针对企业的 ai 平台应用）</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142096#reply12" class="topic-link" id="topic-link-1142096">胡思乱想（针对企业的 ai 平台应用）</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/java">Java</a> &nbsp;•&nbsp; <strong><a href="/member/Misty99">Misty99</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:11:02 +08:00">4 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/aeiou520">aeiou520</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/java">Java</a> &nbsp;•&nbsp; <strong><a href="/member/Misty99">Misty99</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:58:27 +08:00">9 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/lqw3030">lqw3030</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1142096#reply2" class="count_livid">2</a>
+                <a href="/t/1142096#reply12" class="count_livid">12</a>
                 
             </td>
         </tr>
@@ -736,16 +1096,311 @@ for (link in links) {
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             
-            <td width="48" valign="top" align="center"><a href="/member/cs5117155"><img src="https://cdn.v2ex.com/gravatar/c7719454bc05e01ae6389ac9eeab6147?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="cs5117155" /></a></td>
+            <td width="48" valign="top" align="center"><a href="/member/yuzuke"><img src="https://cdn.v2ex.com/avatar/dc60/ef30/546624_xlarge.png?m=1745831544" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="yuzuke" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141965#reply18" class="topic-link" id="topic-link-1141965">有什么可以替代腾讯代码托管 CODING DevOps</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142158#reply22" class="topic-link" id="topic-link-1142158">有个 NVME 盘用了好些年最近老掉盘， smartctl 查的指标咋分析健康状态。</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/cs5117155">cs5117155</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:10:32 +08:00">5 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/hwb">hwb</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/yuzuke">yuzuke</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 13:34:17 +08:00">19 小时 33 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/importmeta">importmeta</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1141965#reply18" class="count_livid">18</a>
+                <a href="/t/1142158#reply22" class="count_livid">22</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/wwll21"><img src="https://cdn.v2ex.com/gravatar/38310891253684fd410b3975b4280c32?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="wwll21" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142220#reply0" class="topic-link" id="topic-link-1142220">powerdns-dnsdist 拦截功能更新</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/dns">DNS</a> &nbsp;•&nbsp; <strong><a href="/member/wwll21">wwll21</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 12:20:09 +08:00">20 小时 47 分钟前</span></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/iorilu"><img src="https://cdn.v2ex.com/avatar/7121/0eb9/222090_large.png?m=1726796040" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="iorilu" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142144#reply6" class="topic-link" id="topic-link-1142144">要提防陷入 ai 工具陷阱</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/iorilu">iorilu</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 07:57:38 +08:00">1 小时 10 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/codefun666">codefun666</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142144#reply6" class="count_livid">6</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/nulIptr"><img src="https://cdn.v2ex.com/gravatar/ebba3b7b6ada2bb1f6d1ed40e93ddf29?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="nulIptr" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142179#reply5" class="topic-link" id="topic-link-1142179">看文档的时候偶然发现：为什么 https://weui.io/能使用颁发给 weixin.qq.com 的证书？</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/nulIptr">nulIptr</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 11:07:14 +08:00">22 小时 0 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/yougg">yougg</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142179#reply5" class="count_livid">5</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/godbasin"><img src="https://cdn.v2ex.com/avatar/44d8/2476/255789_large.png?m=1751334865" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="godbasin" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142147#reply3" class="topic-link" id="topic-link-1142147">分享结合 AI 学习前端的视频</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;1 &nbsp;&nbsp; </div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/godbasin">godbasin</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 10:59:34 +08:00">22 小时 8 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/godbasin">godbasin</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142147#reply3" class="count_livid">3</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/0littleboy"><img src="https://cdn.v2ex.com/avatar/9c6f/fcda/478438_xlarge.png?m=1684119694" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="0littleboy" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142203#reply1" class="topic-link" id="topic-link-1142203">cursor bug finder 现在怎么不能用了？</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/0littleboy">0littleboy</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 14:43:35 +08:00">18 小时 24 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/GDSR">GDSR</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142203#reply1" class="count_livid">1</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/tfu"><img src="https://cdn.v2ex.com/gravatar/207e6df4e8ca663dbd948ff8eac25b6e?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="tfu" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142029#reply16" class="topic-link" id="topic-link-1142029">OpenAI 是没钱买代理服务器吗？竟然来白嫖我的 GitHub/ArXiv 镜像服务器爬取数据用于训练 GPT</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/tfu">tfu</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 23:35:06 +08:00">9 小时 32 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/ragnaroks">ragnaroks</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142029#reply16" class="count_livid">16</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/HeyCaptainJack"><img src="https://cdn.v2ex.com/avatar/96d2/ff23/557305_xlarge.png?m=1729300553" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="HeyCaptainJack" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142093#reply12" class="topic-link" id="topic-link-1142093">Dokploy 用了一段时间，确实好使</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/HeyCaptainJack">HeyCaptainJack</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 22:16:42 +08:00">10 小时 51 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/paynezhuang">paynezhuang</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142093#reply12" class="count_livid">12</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/seers"><img src="https://cdn.v2ex.com/avatar/46ae/84c9/73974_large.png?m=1701533158" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="seers" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142358#reply2" class="topic-link" id="topic-link-1142358">DeepSeek 每次都是英文回答，如何避免</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/seers">seers</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 09:00:08 +08:00">7 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/VeryZero">VeryZero</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142358#reply2" class="count_livid">2</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/ioooori"><img src="https://cdn.v2ex.com/avatar/f0ac/921f/635515_xlarge.png?m=1702973012" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ioooori" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142066#reply26" class="topic-link" id="topic-link-1142066">clash 开了系统代理以后，所有和微软有关的服务都登录不了， edge 账号登陆、Vscode 同步等，有需要什么特别设置的吗？</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/ioooori">ioooori</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 20:23:30 +08:00">12 小时 44 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/ioooori">ioooori</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142066#reply26" class="count_livid">26</a>
                 
             </td>
         </tr>
@@ -772,13 +1427,13 @@ for (link in links) {
             <td width="48" valign="top" align="center"><a href="/member/exploretheworld"><img src="https://cdn.v2ex.com/avatar/e5f9/60d5/215672_large.png?m=1751271163" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="exploretheworld" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142010#reply23" class="topic-link" id="topic-link-1142010">这是我今天看到的最好笑的笑话-纯手写 Java 代码</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142010#reply29" class="topic-link" id="topic-link-1142010">这是我今天看到的最好笑的笑话-纯手写 Java 代码</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/exploretheworld">exploretheworld</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 00:43:08 +08:00">8 小时 32 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/zhmouV2">zhmouV2</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/exploretheworld">exploretheworld</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 00:53:52 +08:00">8 小时 14 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/gigishy">gigishy</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1142010#reply23" class="count_livid">23</a>
+                <a href="/t/1142010#reply29" class="count_livid">29</a>
                 
             </td>
         </tr>
@@ -802,16 +1457,16 @@ for (link in links) {
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             
-            <td width="48" valign="top" align="center"><a href="/member/vgjjk"><img src="https://cdn.v2ex.com/gravatar/a2e063c9dc9fafc73742180b39901144?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="vgjjk" /></a></td>
+            <td width="48" valign="top" align="center"><a href="/member/huangxd007"><img src="https://cdn.v2ex.com/gravatar/09cf79ea6d9e6af2ef62b27b46b08157?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="huangxd007" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142013#reply14" class="topic-link" id="topic-link-1142013">好像从这个月开始，谷歌的 5228 端口被 gfw 完全阻断了</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142075#reply11" class="topic-link" id="topic-link-1142075">请教各位佬一个 moviepilot 的问题</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;1 &nbsp;&nbsp; </div><a class="node" href="/go/google">Google</a> &nbsp;•&nbsp; <strong><a href="/member/vgjjk">vgjjk</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:13:57 +08:00">1 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/pagxir">pagxir</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/huangxd007">huangxd007</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 19:24:56 +08:00">13 小时 43 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/shineben">shineben</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1142013#reply14" class="count_livid">14</a>
+                <a href="/t/1142075#reply11" class="count_livid">11</a>
                 
             </td>
         </tr>
@@ -835,212 +1490,16 @@ for (link in links) {
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             
-            <td width="48" valign="top" align="center"><a href="/member/404www"><img src="https://cdn.v2ex.com/gravatar/44c327eb51eee232430c7718de1a3734?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="404www" /></a></td>
+            <td width="48" valign="top" align="center"><a href="/member/cnbatch"><img src="https://cdn.v2ex.com/gravatar/7eb06cdf719fb364a1dfbbaefc4f9d36?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="cnbatch" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142082#reply3" class="topic-link" id="topic-link-1142082">QQ 新版感觉太臃肿， Tim 有听说会扫盘</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142106#reply8" class="topic-link" id="topic-link-1142106">有篇 2021 年的文章说 epoll 早于 kqueue，我的同事差点被误导</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/404www">404www</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 08:07:26 +08:00">1 小时 8 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/busier">busier</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/cnbatch">cnbatch</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 23:29:54 +08:00">9 小时 38 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/cnbatch">cnbatch</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1142082#reply3" class="count_livid">3</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/vincentCheong"><img src="https://cdn.v2ex.com/gravatar/663e2d9e7b3a687e1ceae674d0d822d9?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="vincentCheong" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141864#reply21" class="topic-link" id="topic-link-1141864">Android 零基础, 现在要负责公司的一个项目, 还望老手给一些建议</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/vincentCheong">vincentCheong</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 19:32:49 +08:00">13 小时 42 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/lijunjieone">lijunjieone</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141864#reply21" class="count_livid">21</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/jidixuelang"><img src="https://cdn.v2ex.com/avatar/e6a8/8d08/11839_large.png?m=1750682886" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="jidixuelang" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142064#reply0" class="topic-link" id="topic-link-1142064">关于轻量服务器以及 cdn 采购的一些问题</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/cloud">云计算</a> &nbsp;•&nbsp; <strong><a href="/member/jidixuelang">jidixuelang</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 19:30:20 +08:00">13 小时 45 分钟前</span></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/owen800q"><img src="https://cdn.v2ex.com/gravatar/757883d1d6cab2375e6331cbe648a7a9?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="owen800q" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141952#reply42" class="topic-link" id="topic-link-1141952">公司屏蔽了 cursor 服务器， 我用 nginx 设置了个反向代理， 如何让 cursor 客户端使用我的 nginx 代理？</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/owen800q">owen800q</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 08:47:23 +08:00">28 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/e3c78a97e0f8">e3c78a97e0f8</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141952#reply42" class="count_livid">42</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/KaneW95"><img src="https://cdn.v2ex.com/gravatar/f1c5ce0de8b36c984dc5bf886aa5a3fd?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="KaneW95" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142036#reply2" class="topic-link" id="topic-link-1142036">飞书的思维导图内容不能换行</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/KaneW95">KaneW95</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:08:59 +08:00">6 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/ZeekChatCom">ZeekChatCom</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1142036#reply2" class="count_livid">2</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/daju233"><img src="https://cdn.v2ex.com/avatar/ad40/98a9/590132_xlarge.png?m=1725647291" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="daju233" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141838#reply24" class="topic-link" id="topic-link-1141838">好的 c++代码是什么样的</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/cpp">C++</a> &nbsp;•&nbsp; <strong><a href="/member/daju233">daju233</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 02:19:25 +08:00">6 小时 56 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/daju233">daju233</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141838#reply24" class="count_livid">24</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/iwannay"><img src="https://cdn.v2ex.com/avatar/d5e9/a6c0/336085_xlarge.png?m=1748309601" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="iwannay" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141846#reply8" class="topic-link" id="topic-link-1141846">冒泡一下， rust 任务调度工具 jiascheduler，正在开发工作流功能（任务编排），下个月应该可以完成基础功能开发</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/iwannay">iwannay</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 21:51:19 +08:00">11 小时 24 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/HENQIGUAI">HENQIGUAI</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141846#reply8" class="count_livid">8</a>
+                <a href="/t/1142106#reply8" class="count_livid">8</a>
                 
             </td>
         </tr>
@@ -1067,13 +1526,112 @@ for (link in links) {
             <td width="48" valign="top" align="center"><a href="/member/kdwycz"><img src="https://cdn.v2ex.com/avatar/5e08/74d6/71423_large.png?m=1522317546" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="kdwycz" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141998#reply6" class="topic-link" id="topic-link-1141998">Windows 11 Version 24H2 的 06 累积更新 终于把切换窗口后输入法变中文的 Bug 修复了</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141998#reply10" class="topic-link" id="topic-link-1141998">Windows 11 Version 24H2 的 06 累积更新 终于把切换窗口后输入法变中文的 Bug 修复了</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/windows">Windows</a> &nbsp;•&nbsp; <strong><a href="/member/kdwycz">kdwycz</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 08:58:30 +08:00">17 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/iv8d">iv8d</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/windows">Windows</a> &nbsp;•&nbsp; <strong><a href="/member/kdwycz">kdwycz</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 07:04:55 +08:00">2 小时 3 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/nagisaushio">nagisaushio</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1141998#reply6" class="count_livid">6</a>
+                <a href="/t/1141998#reply10" class="count_livid">10</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/ryanlu365"><img src="https://cdn.v2ex.com/gravatar/790763ec6c0ca08c1f641436275454f3?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ryanlu365" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141992#reply7" class="topic-link" id="topic-link-1141992">为什么那么多独立开发选择 nextjs</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/ryanlu365">ryanlu365</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 23:43:38 +08:00">9 小时 24 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/ragnaroks">ragnaroks</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141992#reply7" class="count_livid">7</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/zihuyishi"><img src="https://cdn.v2ex.com/gravatar/ab8ff1d1fcd924ad859ca6e32fa32ca1?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="zihuyishi" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141198#reply28" class="topic-link" id="topic-link-1141198">golang 服务器处理上传时，如果 form 文件过大，居然会往/tmp 目录写文件，要怎么优雅的处理呢？</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/go">Go 编程语言</a> &nbsp;•&nbsp; <strong><a href="/member/zihuyishi">zihuyishi</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 21:52:21 +08:00">11 小时 15 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/eudore">eudore</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141198#reply28" class="count_livid">28</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/abbychau"><img src="https://cdn.v2ex.com/gravatar/17623b699060c78823d7d6c95d1de7ec?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="abbychau" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142073#reply4" class="topic-link" id="topic-link-1142073">跨平台的 MySQL Parser</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/mysql">MySQL</a> &nbsp;•&nbsp; <strong><a href="/member/abbychau">abbychau</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 00:39:18 +08:00">8 小时 28 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/c4pt0r">c4pt0r</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142073#reply4" class="count_livid">4</a>
                 
             </td>
         </tr>
@@ -1100,13 +1658,343 @@ for (link in links) {
             <td width="48" valign="top" align="center"><a href="/member/imes"><img src="https://cdn.v2ex.com/avatar/dd9d/8f79/520237_large.png?m=1661321499" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="imes" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141786#reply36" class="topic-link" id="topic-link-1141786">程序员的第一个 NAS： 采用 N150 的 1100 元的 6 盘位 NAS</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141786#reply38" class="topic-link" id="topic-link-1141786">程序员的第一个 NAS： 采用 N150 的 1100 元的 6 盘位 NAS</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/imes">imes</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 21:55:31 +08:00">11 小时 20 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/alfawei">alfawei</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/imes">imes</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 20:42:17 +08:00">12 小时 25 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/edisonwong">edisonwong</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1141786#reply36" class="count_livid">36</a>
+                <a href="/t/1141786#reply38" class="count_livid">38</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/vgjjk"><img src="https://cdn.v2ex.com/gravatar/a2e063c9dc9fafc73742180b39901144?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="vgjjk" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142013#reply18" class="topic-link" id="topic-link-1142013">好像从这个月开始，谷歌的 5228 端口被 gfw 完全阻断了</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;1 &nbsp;&nbsp; </div><a class="node" href="/go/google">Google</a> &nbsp;•&nbsp; <strong><a href="/member/vgjjk">vgjjk</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 22:23:15 +08:00">10 小时 44 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/yyws2012">yyws2012</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142013#reply18" class="count_livid">18</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/cs5117155"><img src="https://cdn.v2ex.com/gravatar/c7719454bc05e01ae6389ac9eeab6147?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="cs5117155" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141965#reply19" class="topic-link" id="topic-link-1141965">有什么可以替代腾讯代码托管 CODING DevOps</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/cs5117155">cs5117155</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:51:42 +08:00">23 小时 16 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/panlatent">panlatent</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141965#reply19" class="count_livid">19</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/LudwigWS"><img src="https://cdn.v2ex.com/avatar/2958/e5b2/312565_large.png?m=1659186115" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="LudwigWS" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142263#reply9" class="topic-link" id="topic-link-1142263">早上 JetBrains 送的一年全家桶如果区域选的国外会送 JetBrains AI Pro 吗</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/LudwigWS">LudwigWS</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:00:04 +08:00">1 小时 8 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/congyoubanmian">congyoubanmian</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142263#reply9" class="count_livid">9</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/xabclink"><img src="https://cdn.v2ex.com/avatar/d5ba/2dd0/624318_xlarge.png?m=1749866938" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="xabclink" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142094#reply65" class="topic-link" id="topic-link-1142094">看到一些 github 项目作者,总是千方百计利诱网友给予 star</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/xabclink">xabclink</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 06:38:23 +08:00">2 小时 29 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/woniuppp">woniuppp</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142094#reply65" class="count_livid">65</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/jidixuelang"><img src="https://cdn.v2ex.com/avatar/e6a8/8d08/11839_large.png?m=1750682886" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="jidixuelang" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142064#reply3" class="topic-link" id="topic-link-1142064">关于轻量服务器以及 cdn 采购的一些问题</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/cloud">云计算</a> &nbsp;•&nbsp; <strong><a href="/member/jidixuelang">jidixuelang</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 11:43:41 +08:00">21 小时 24 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/lnbiuc">lnbiuc</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142064#reply3" class="count_livid">3</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/404www"><img src="https://cdn.v2ex.com/gravatar/44c327eb51eee232430c7718de1a3734?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="404www" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142082#reply5" class="topic-link" id="topic-link-1142082">QQ 新版感觉太臃肿， Tim 有听说会扫盘</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/404www">404www</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 16:00:02 +08:00">17 小时 8 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/GotKiCry">GotKiCry</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142082#reply5" class="count_livid">5</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/vincentCheong"><img src="https://cdn.v2ex.com/gravatar/663e2d9e7b3a687e1ceae674d0d822d9?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="vincentCheong" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141864#reply23" class="topic-link" id="topic-link-1141864">Android 零基础, 现在要负责公司的一个项目, 还望老手给一些建议</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/vincentCheong">vincentCheong</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 17:35:44 +08:00">15 小时 32 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/zengyufei">zengyufei</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141864#reply23" class="count_livid">23</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/wang1c"><img src="https://cdn.v2ex.com/avatar/d720/9dcc/603540_xlarge.png?m=1751336080" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="wang1c" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141997#reply12" class="topic-link" id="topic-link-1141997">求助！有大佬们订阅 AugmentCode 了吗？</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/wang1c">wang1c</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 18:43:10 +08:00">14 小时 24 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/wang1c">wang1c</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141997#reply12" class="count_livid">12</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/owen800q"><img src="https://cdn.v2ex.com/gravatar/757883d1d6cab2375e6331cbe648a7a9?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="owen800q" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141952#reply44" class="topic-link" id="topic-link-1141952">公司屏蔽了 cursor 服务器， 我用 nginx 设置了个反向代理， 如何让 cursor 客户端使用我的 nginx 代理？</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/owen800q">owen800q</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 10:02:58 +08:00">23 小时 5 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/catamaran">catamaran</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141952#reply44" class="count_livid">44</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/KaneW95"><img src="https://cdn.v2ex.com/gravatar/f1c5ce0de8b36c984dc5bf886aa5a3fd?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="KaneW95" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142036#reply4" class="topic-link" id="topic-link-1142036">飞书的思维导图内容不能换行</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/KaneW95">KaneW95</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 19:05:38 +08:00">14 小时 2 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/KaneW95">KaneW95</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1142036#reply4" class="count_livid">4</a>
                 
             </td>
         </tr>
@@ -1133,13 +2021,13 @@ for (link in links) {
             <td width="48" valign="top" align="center"><a href="/member/ShimaKazeLiu"><img src="https://cdn.v2ex.com/avatar/21a4/67f3/661144_xlarge.png?m=1734918212" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ShimaKazeLiu" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141972#reply8" class="topic-link" id="topic-link-1141972">有没有机会让我的三星平板用上小米云服务？</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141972#reply10" class="topic-link" id="topic-link-1141972">有没有机会让我的三星平板用上小米云服务？</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/ShimaKazeLiu">ShimaKazeLiu</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:55:19 +08:00">15 小时 20 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/moefishtang">moefishtang</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/ShimaKazeLiu">ShimaKazeLiu</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 10:20:45 +08:00">22 小时 47 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/csx163">csx163</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1141972#reply8" class="count_livid">8</a>
+                <a href="/t/1141972#reply10" class="count_livid">10</a>
                 
             </td>
         </tr>
@@ -1163,16 +2051,82 @@ for (link in links) {
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             
-            <td width="48" valign="top" align="center"><a href="/member/wang1c"><img src="https://cdn.v2ex.com/avatar/d720/9dcc/603540_xlarge.png?m=1739844089" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="wang1c" /></a></td>
+            <td width="48" valign="top" align="center"><a href="/member/lululau"><img src="https://cdn.v2ex.com/avatar/1352/d2eb/15170_large.png?m=1751341400" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="lululau" /></a></td>
             <td width="10"></td>
             
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141997#reply3" class="topic-link" id="topic-link-1141997">求助！有大佬们订阅 AugmentCode 了吗？</a></span>
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142207#reply2" class="topic-link" id="topic-link-1142207">Intellij IDEA 升级到 2025.1 之后，你们 multi maven module 项目，两个 module 之间的代码可以正常跳转吗？</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/wang1c">wang1c</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:54:11 +08:00">15 小时 21 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/daimaosix">daimaosix</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/lululau">lululau</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 17:31:49 +08:00">15 小时 36 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/lululau">lululau</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
-                <a href="/t/1141997#reply3" class="count_livid">3</a>
+                <a href="/t/1142207#reply2" class="count_livid">2</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/daju233"><img src="https://cdn.v2ex.com/avatar/ad40/98a9/590132_xlarge.png?m=1725647291" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="daju233" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141838#reply27" class="topic-link" id="topic-link-1141838">好的 c++代码是什么样的</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/cpp">C++</a> &nbsp;•&nbsp; <strong><a href="/member/daju233">daju233</a></strong> &nbsp;•&nbsp; <span title="2025-07-02 08:17:01 +08:00">51 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/xuelang">xuelang</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141838#reply27" class="count_livid">27</a>
+                
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cell item" style="">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            
+            <td width="48" valign="top" align="center"><a href="/member/iwannay"><img src="https://cdn.v2ex.com/avatar/d5e9/a6c0/336085_xlarge.png?m=1748309601" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="iwannay" /></a></td>
+            <td width="10"></td>
+            
+            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141846#reply9" class="topic-link" id="topic-link-1141846">冒泡一下， rust 任务调度工具 jiascheduler，正在开发工作流功能（任务编排），下个月应该可以完成基础功能开发</a></span>
+            <div class="sep5"></div>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/iwannay">iwannay</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 09:21:06 +08:00">23 小时 46 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/accomplishwonder">accomplishwonder</a></strong></span>
+            </td>
+            <td width="70" align="right" valign="middle">
+                
+                <a href="/t/1141846#reply9" class="count_livid">9</a>
                 
             </td>
         </tr>
@@ -1201,865 +2155,11 @@ for (link in links) {
             
             <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141873#reply11" class="topic-link" id="topic-link-1141873">安卓项目后台定时器执行 WiFi 扫描任务是不是很麻烦？</a></span>
             <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/jackOff">jackOff</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:14:07 +08:00">16 小时 1 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Cheons">Cheons</a></strong></span>
+            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/jackOff">jackOff</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:14:07 +08:00">1 天前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Cheons">Cheons</a></strong></span>
             </td>
             <td width="70" align="right" valign="middle">
                 
                 <a href="/t/1141873#reply11" class="count_livid">11</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/binggg"><img src="https://cdn.v2ex.com/avatar/4c75/f6b4/247768_large.png?m=1751006570" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="binggg" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141977#reply4" class="topic-link" id="topic-link-1141977">Anthropic 推出 DXT ：本地 MCP 的一键安装包</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/binggg">binggg</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:27:32 +08:00">15 小时 48 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/binggg">binggg</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141977#reply4" class="count_livid">4</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/ryanlu365"><img src="https://cdn.v2ex.com/gravatar/790763ec6c0ca08c1f641436275454f3?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ryanlu365" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141992#reply5" class="topic-link" id="topic-link-1141992">为什么那么多独立开发选择 nextjs</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/ryanlu365">ryanlu365</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 07:20:17 +08:00">1 小时 55 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/12tall">12tall</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141992#reply5" class="count_livid">5</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/mkt"><img src="https://cdn.v2ex.com/gravatar/806f0633fddbd3b69038f1564266a6ed?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="mkt" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141956#reply2" class="topic-link" id="topic-link-1141956">有没有大哥有 windows 下的 mp +qb+IYUU+emby 的 dockerfile</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/nas">NAS</a> &nbsp;•&nbsp; <strong><a href="/member/mkt">mkt</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 16:11:52 +08:00">17 小时 3 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/he1293024908">he1293024908</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141956#reply2" class="count_livid">2</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/ponwayway"><img src="https://cdn.v2ex.com/gravatar/6ae084c73a61f8fc0a4fab8054adca6b?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ponwayway" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1142058#reply0" class="topic-link" id="topic-link-1142058">有必要在 bug 上开发新功能吗</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/ponwayway">ponwayway</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 18:57:28 +08:00">14 小时 18 分钟前</span></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/harryho97"><img src="https://cdn.v2ex.com/avatar/59c5/3808/115119_xlarge.png?m=1750906478" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="harryho97" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141911#reply4" class="topic-link" id="topic-link-1141911">最新一代“摄影风格”是如何存储相关信息的？</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/idev">iDev</a> &nbsp;•&nbsp; <strong><a href="/member/harryho97">harryho97</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 14:21:59 +08:00">18 小时 53 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/wheat0r">wheat0r</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141911#reply4" class="count_livid">4</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/smartdoc647"><img src="https://cdn.v2ex.com/gravatar/7ddd2d6737bcf1329b0430983ee1d9db?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="smartdoc647" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141887#reply1" class="topic-link" id="topic-link-1141887">smart-doc 3.1.1 发布， Java 零注解 API 文档生成工具</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/smartdoc647">smartdoc647</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 18:18:18 +08:00">14 小时 57 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/pisay">pisay</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141887#reply1" class="count_livid">1</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/ADavid"><img src="https://cdn.v2ex.com/avatar/d5d1/d60f/692534_xlarge.png?m=1751263717" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="ADavid" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141913#reply0" class="topic-link" id="topic-link-1141913">拯救 996 码农，一键生成中文规范类， IDEA 插件快来下载使用体验~</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/ADavid">ADavid</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 11:31:33 +08:00">21 小时 44 分钟前</span></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/liwenka1"><img src="https://cdn.v2ex.com/avatar/3fee/83be/665970_xlarge.png?m=1751201498" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="liwenka1" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141808#reply24" class="topic-link" id="topic-link-1141808">尝试做了一个 tauri 的客户端项目，并且分享一下最近参加 cursor 中国社区举办的活动经历</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/liwenka1">liwenka1</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 13:38:28 +08:00">19 小时 37 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/freeloop1">freeloop1</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141808#reply24" class="count_livid">24</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/natsukage"><img src="https://cdn.v2ex.com/gravatar/d0343c7d4e5d533992fb642c3fb9a135?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="natsukage" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141790#reply18" class="topic-link" id="topic-link-1141790">claude code 的服从性远不如 cursor</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/natsukage">natsukage</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 03:35:40 +08:00">5 小时 39 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/flowerwow0316">flowerwow0316</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141790#reply18" class="count_livid">18</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/Philosophy"><img src="https://cdn.v2ex.com/avatar/9ddb/0fe6/341211_large.png?m=1534312651" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Philosophy" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141792#reply6" class="topic-link" id="topic-link-1141792">gv 号收不到纸飞机验证码</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/google">Google</a> &nbsp;•&nbsp; <strong><a href="/member/Philosophy">Philosophy</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 00:15:04 +08:00">9 小时 0 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/Philosophy">Philosophy</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141792#reply6" class="count_livid">6</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/cnbatch"><img src="https://cdn.v2ex.com/gravatar/7eb06cdf719fb364a1dfbbaefc4f9d36?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="cnbatch" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141825#reply8" class="topic-link" id="topic-link-1141825">噗！“类型弱置”</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/cnbatch">cnbatch</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 14:52:38 +08:00">18 小时 22 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/DOLLOR">DOLLOR</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141825#reply8" class="count_livid">8</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/LucasMartine"><img src="https://cdn.v2ex.com/avatar/8641/8c24/750204_xlarge.png?m=1748333596" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="LucasMartine" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141734#reply25" class="topic-link" id="topic-link-1141734">兄弟们，没事别给网站改版啊，流量卡卡掉</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/LucasMartine">LucasMartine</a></strong> &nbsp;•&nbsp; <span title="2025-07-01 08:29:38 +08:00">45 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/dhb233">dhb233</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141734#reply25" class="count_livid">25</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/wwyf"><img src="https://cdn.v2ex.com/gravatar/5b69e74aff9bfbb83adf33bc21201f43?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="wwyf" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141784#reply14" class="topic-link" id="topic-link-1141784">关于 claude code: opus 模型 对比 sonnet 模型, 5x 价格值得吗？</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/wwyf">wwyf</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 22:24:50 +08:00">10 小时 50 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/gdfsjunjun">gdfsjunjun</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141784#reply14" class="count_livid">14</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/itchina110"><img src="https://cdn.v2ex.com/avatar/2d5b/53f8/10411_xlarge.png?m=1751184741" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="itchina110" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141777#reply9" class="topic-link" id="topic-link-1141777">VueConf 2025 所有演讲嘉宾及日程已确定， 7 月 12 日，深圳见！</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;2 &nbsp;&nbsp; </div><a class="node" href="/go/vue">Vue.js</a> &nbsp;•&nbsp; <strong><a href="/member/itchina110">itchina110</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 10:37:19 +08:00">22 小时 38 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/alleluya">alleluya</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141777#reply9" class="count_livid">9</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/aiyolo"><img src="https://cdn.v2ex.com/gravatar/d162645744841115bc8f255d2c6a1709?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="aiyolo" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141420#reply32" class="topic-link" id="topic-link-1141420">软考成绩出了，评论里调研一下大家的通过情况</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/aiyolo">aiyolo</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 20:38:06 +08:00">12 小时 37 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/wxy8866">wxy8866</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141420#reply32" class="count_livid">32</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/zhouxiaoxiao"><img src="https://cdn.v2ex.com/avatar/2532/ef60/611700_xlarge.png?m=1717375390" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="zhouxiaoxiao" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141353#reply233" class="topic-link" id="topic-link-1141353">如果你的组员，用 controller 直接调用 mapper，是不是可以直接 fire 了</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;1 &nbsp;&nbsp; </div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/zhouxiaoxiao">zhouxiaoxiao</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 16:25:28 +08:00">16 小时 50 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/pslucifer">pslucifer</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141353#reply233" class="count_livid">233</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/livc"><img src="https://cdn.v2ex.com/avatar/05cb/734d/143123_large.png?m=1749362271" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="livc" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141675#reply27" class="topic-link" id="topic-link-1141675">电脑如何远程控制华为手机</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/livc">livc</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 20:21:18 +08:00">12 小时 54 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/yuepu">yuepu</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141675#reply27" class="count_livid">27</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/Linioi"><img src="https://cdn.v2ex.com/avatar/9096/40b7/524636_xlarge.png?m=1684594746" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Linioi" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141708#reply10" class="topic-link" id="topic-link-1141708">Dia 浏览器在 restricted country 无法使用？</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/browsers">浏览器</a> &nbsp;•&nbsp; <strong><a href="/member/Linioi">Linioi</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:23:29 +08:00">15 小时 52 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/maximdx">maximdx</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141708#reply10" class="count_livid">10</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/winterbells"><img src="https://cdn.v2ex.com/avatar/55fe/29e6/116124_xlarge.png?m=1720510511" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="winterbells" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141429#reply56" class="topic-link" id="topic-link-1141429">Google 地图出国用不了了…</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/google">Google</a> &nbsp;•&nbsp; <strong><a href="/member/winterbells">winterbells</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 23:08:13 +08:00">10 小时 7 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/winterbells">winterbells</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141429#reply56" class="count_livid">56</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/CooperB"><img src="https://cdn.v2ex.com/gravatar/623b6d2fae189f1511af8caa22b5c559?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="CooperB" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141637#reply18" class="topic-link" id="topic-link-1141637">MySQL 大表排序有什么好的方案？只能上 Mongo？</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/mysql">MySQL</a> &nbsp;•&nbsp; <strong><a href="/member/CooperB">CooperB</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 17:54:43 +08:00">15 小时 20 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/wangYQ">wangYQ</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141637#reply18" class="count_livid">18</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/nicefrp"><img src="https://cdn.v2ex.com/avatar/0f86/0e0b/715625_xlarge.png?m=1729268396" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="nicefrp" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141659#reply36" class="topic-link" id="topic-link-1141659">Android 开发体验没有 web 开发体验好</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/android">Android</a> &nbsp;•&nbsp; <strong><a href="/member/nicefrp">nicefrp</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 13:47:18 +08:00">19 小时 28 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/nicefrp">nicefrp</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141659#reply36" class="count_livid">36</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/Fdyo"><img src="https://cdn.v2ex.com/avatar/fdea/9749/134864_large.png?m=1745398630" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Fdyo" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141427#reply43" class="topic-link" id="topic-link-1141427">近期先不要禁用 Windows 更新</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"><li class="fa fa-chevron-up"></li> &nbsp;2 &nbsp;&nbsp; </div><a class="node" href="/go/windows">Windows</a> &nbsp;•&nbsp; <strong><a href="/member/Fdyo">Fdyo</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 20:31:48 +08:00">12 小时 43 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/BaiLinfeng">BaiLinfeng</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141427#reply43" class="count_livid">43</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/drymonfidelia"><img src="https://cdn.v2ex.com/gravatar/017bcef6e642dbf067e17838a9cd447a?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="drymonfidelia" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141773#reply1" class="topic-link" id="topic-link-1141773">Live2D Euclid 为什么被放弃了？官网都 404 了，看 YouTube 上的宣传视频效果很惊艳，能直接把 2D 模型转 3D，而且都有可以公开的产品了</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/gamedev">游戏开发</a> &nbsp;•&nbsp; <strong><a href="/member/drymonfidelia">drymonfidelia</a></strong> &nbsp;•&nbsp; <span title="2025-06-29 17:58:51 +08:00">1 天前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/PaulSamuelson">PaulSamuelson</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141773#reply1" class="count_livid">1</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/Lemar"><img src="https://cdn.v2ex.com/avatar/6d96/edea/634160_xlarge.png?m=1751179599" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="Lemar" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141760#reply3" class="topic-link" id="topic-link-1141760">问题本身就是解决问题的钥匙——“红温”之一行代码也不会写（但我讲逻辑啊！）</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/Lemar">Lemar</a></strong> &nbsp;•&nbsp; <span title="2025-06-29 20:15:11 +08:00">1 天前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/tomclancy">tomclancy</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141760#reply3" class="count_livid">3</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/SunPng"><img src="https://cdn.v2ex.com/gravatar/389c38e6171f822319a58b26b6e4504f?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="SunPng" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141608#reply43" class="topic-link" id="topic-link-1141608">百度网盘又搞骚操作</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/windows">Windows</a> &nbsp;•&nbsp; <strong><a href="/member/SunPng">SunPng</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 12:34:05 +08:00">20 小时 41 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/fansttty">fansttty</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141608#reply43" class="count_livid">43</a>
-                
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="cell item" style="">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            
-            <td width="48" valign="top" align="center"><a href="/member/4zp8oaahntzvhd"><img src="https://cdn.v2ex.com/gravatar/cc332adb414ec7274a0a7e13dd4253f9?s=48&d=retro" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="4zp8oaahntzvhd" /></a></td>
-            <td width="10"></td>
-            
-            <td width="auto" valign="middle"><span class="item_title"><a href="/t/1141698#reply28" class="topic-link" id="topic-link-1141698">那个 AI 编程工具好一点，让 AI 做一个 mac 翻译 app，很简单，结果基本步步报错，让人红温。。。</a></span>
-            <div class="sep5"></div>
-            <span class="topic_info"><div class="votes"></div><a class="node" href="/go/programmer">程序员</a> &nbsp;•&nbsp; <strong><a href="/member/4zp8oaahntzvhd">4zp8oaahntzvhd</a></strong> &nbsp;•&nbsp; <span title="2025-06-30 13:56:12 +08:00">19 小时 19 分钟前</span> &nbsp;•&nbsp; 最后回复来自 <strong><a href="/member/alleluya">alleluya</a></strong></span>
-            </td>
-            <td width="70" align="right" valign="middle">
-                
-                <a href="/t/1141698#reply28" class="count_livid">28</a>
                 
             </td>
         </tr>
@@ -2099,13 +2199,13 @@ for (link in links) {
                     <div class="fr">
                         <a href="https://www.digitalocean.com/?refcode=1b51f1a7651d" target="_blank"><div id="DigitalOcean"></div></a>
                     </div>
-                    <strong><a href="/about" class="dark" target="_self">关于</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/help" class="dark" target="_self">帮助文档</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="https://blog.v2ex.com/" class="dark" target="_blank">博客</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/help/api" class="dark" target="_self">API</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/faq" class="dark" target="_self">FAQ</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/tools" class="dark" target="_self">实用小工具</a> &nbsp; <span class="snow">·</span> &nbsp; 5091 人在线</strong> &nbsp; <span class="fade">最高记录 6679</span> &nbsp; <span class="snow">·</span> &nbsp; <a href="/select/language" class="f11"><img src="/static/img/language.png?v=6a5cfa731dc71a3769f6daace6784739" width="16" align="absmiddle" id="ico-select-language" /> &nbsp; Select Language</a>
+                    <strong><a href="/about" class="dark" target="_self">关于</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/help" class="dark" target="_self">帮助文档</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="https://blog.v2ex.com/" class="dark" target="_blank">博客</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/help/api" class="dark" target="_self">API</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/faq" class="dark" target="_self">FAQ</a> &nbsp; <span class="snow">·</span> &nbsp; <a href="/tools" class="dark" target="_self">实用小工具</a> &nbsp; <span class="snow">·</span> &nbsp; 4859 人在线</strong> &nbsp; <span class="fade">最高记录 6679</span> &nbsp; <span class="snow">·</span> &nbsp; <a href="/select/language" class="f11"><img src="/static/img/language.png?v=6a5cfa731dc71a3769f6daace6784739" width="16" align="absmiddle" id="ico-select-language" /> &nbsp; Select Language</a>
                     <div class="sep20"></div>
                     创意工作者们的社区
                     <div class="sep5"></div>
                     World is powered by solitude
                     <div class="sep20"></div>
-                    <span class="small fade">VERSION: 3.9.8.5 · 8ms · <a href="/worldclock#utc">UTC 01:15</a> · <a href="/worldclock#pvg">PVG 09:15</a> · <a href="/worldclock#lax">LAX 18:15</a> · <a href="/worldclock#jfk">JFK 21:15</a><br />Developed with <a href="https://cl.v2ex.pro/" target="_blank">CodeLauncher</a><br />♥ Do have faith in what you're doing.</span>
+                    <span class="small fade">VERSION: 3.9.8.5 · 8ms · <a href="/worldclock#utc">UTC 01:08</a> · <a href="/worldclock#pvg">PVG 09:08</a> · <a href="/worldclock#lax">LAX 18:08</a> · <a href="/worldclock#jfk">JFK 21:08</a><br />Developed with <a href="https://cl.v2ex.pro/" target="_blank">CodeLauncher</a><br />♥ Do have faith in what you're doing.</span>
                 <div class="sep10"></div>
             </div>
         </div>
