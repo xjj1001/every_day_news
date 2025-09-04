@@ -46,10 +46,11 @@ def get_trends():
 
 
 trend_list = get_trends()
-# 用trends拼接一个邮件内容
-email_content = "GitHub Trending Repositories:\n\n"
+# 用trend_list拼接一个html邮件内容
+email_content = "<h2>GitHub Trending Repositories:</h2><br>"
 for trend in trend_list:
-    email_content += f"Language: {trend['language']}\nTitle: {trend['title']}\nLink: {trend['link']}\nDescription: {trend['description']}\n\n"
+    email_content += f"<b>Language:</b> {trend['language']}<br><b>Title:</b> {trend['title']}<br><b>Link:</b> <a href='{trend['link']}'>{trend['link']}</a><br><b>Description:</b> {trend['description']}<br><br>"
+    
 
 # 创建一个实例msg
 msg = MIMEMultipart()
