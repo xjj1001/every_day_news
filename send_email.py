@@ -55,7 +55,7 @@ for trend in trend_list:
 msg = MIMEMultipart()
 msg['From'] = f'"xujianjun" <{from_addr}>'  # 发送者
 msg['To'] = Header('到点就困告')  # 接收者
-subject = email_content
+subject = "Github热榜"
 msg['Subject'] = Header(subject, 'utf-8')  # 邮件主题
 # 邮件正文内容
 msg.attach(MIMEText(email_content, 'plain', 'utf-8'))
