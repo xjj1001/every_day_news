@@ -6,6 +6,7 @@ echo "1,2,3" >> add.csv
 curl -o v2ex.html https://v2ex.com
 git status
 git add add.csv
+pip install bs4
 pip list
 
 python send_email.py
