@@ -67,10 +67,27 @@ def get_trends():
 
 
 trend_list = get_trendsv2()
+print(trend_list)
 # 用trend_list拼接一个html邮件内容
 email_content = "<h2>GitHub 热榜:</h2><br>"
 for trend in trend_list:
     email_content += f"<b>语言:</b> {trend['language']}<br><b>标题:</b> {trend['title']}<br><b>链接:</b> <a href='{trend['link']}'>{trend['link']}</a><br><b>概览:</b> {trend['description']}<br><br>"
+
+
+# 将trend_list结果写入到以当前日期为文件名的markdown文件
+import datetime
+today_str = datetime.datetime.now().strftime('%Y-%m-%d')
+trends = './trends'
+if not os.path.exists(trends):
+    os.makedirs(trends)
+with open(os.path.join(trends, f'{today_str}.md'), 'w', encoding='utf-8') as f:
+    f.write(f"# GitHub 热榜 - {today_str}\n\n")
+    for trend in trend_list:
+        f.write(f"## {trend['title']}\n")
+        f.write(f"- 语言: {trend['language']}\n")
+        f.write(f"- 链接: [{trend['link']}]({trend['link']})\n")
+        f.write(f"- 概览: {trend['description']}\n\n")
+
 
 # 创建一个实例msg
 msg = MIMEMultipart()
