@@ -10,6 +10,7 @@ from email.header import Header
 from_addr = os.environ.get("USER_EMAIL")
 password = os.environ.get("USER_PASSWORD")
 get_trends_str = os.environ.get("GET_TRENDS")
+print(get_trends_str)
 # 收信方邮箱
 to_addr = from_addr
 # 发信服务器
