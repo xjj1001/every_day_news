@@ -33,8 +33,8 @@ jobs:
         env:
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-          TO_EMAILS: ${{ env.TO_EMAILS }}
-          TREND_URL: ${{ env.TREND_URL }}
+          TO_EMAILS: ${{ vars.TO_EMAILS }}
+          TREND_URL: ${{ vars.TREND_URL }}
       - name: commit
         uses: EndBug/add-and-commit@v4
         with: 
