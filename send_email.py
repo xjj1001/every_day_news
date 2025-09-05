@@ -11,7 +11,7 @@ import requests
 from_addr = os.environ.get("USER_EMAIL")
 password = os.environ.get("USER_PASSWORD")
 # 收信方邮箱
-to_addr = from_addr
+to_addr = [from_addr, '16613039936@163.com']
 # 发信服务器
 smtp_server = 'smtp.qq.com'
 
