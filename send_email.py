@@ -11,9 +11,10 @@ import requests
 from_addr = os.environ.get("USER_EMAIL")
 password = os.environ.get("USER_PASSWORD")
 trend_url = os.environ.get("TREND_URL")
-to_addrs = os.environ.get("TO_EMAILS", [])
-# 收信方邮箱
-to_addr = [from_addr] + eval(to_addrs)
+to_addrs = os.environ.get("TO_EMAILS", "")
+to_addr = [from_addr]
+if to_addrs:
+    to_addr += [email.strip() for email in to_addrs.split(",") if email.strip()]
 # 发信服务器
 smtp_server = 'smtp.qq.com'
 
