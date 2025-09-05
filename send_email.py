@@ -12,6 +12,7 @@ from_addr = os.environ.get("USER_EMAIL")
 password = os.environ.get("USER_PASSWORD")
 trend_url = os.environ.get("TREND_URL")
 to_addrs = os.environ.get("TO_EMAILS", "")
+print(os.environ)
 to_addr = [from_addr]
 if to_addrs:
     to_addr += [email.strip() for email in to_addrs.split(",") if email.strip()]
