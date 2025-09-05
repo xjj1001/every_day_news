@@ -10,8 +10,10 @@ import requests
 # 发信方的信息：发信邮箱，QQ 邮箱授权码
 from_addr = os.environ.get("USER_EMAIL")
 password = os.environ.get("USER_PASSWORD")
+trend_url = os.environ.get("TREND_URL")
+to_addrs = os.environ.get("TO_EMAILS", [])
 # 收信方邮箱
-to_addr = [from_addr, '16613039936@163.com']
+to_addr = [from_addr] + eval(to_addrs)
 # 发信服务器
 smtp_server = 'smtp.qq.com'
 
@@ -24,7 +26,7 @@ def get_trendsv2():
         "cache-control": "no-cache",
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
     }
-    response = requests.get('https://trendforge.devlive.org/trending/daily', headers=headers)
+    response = requests.get(trend_url, headers=headers)
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(response.text, 'html.parser')
     repo_list = soup.find('div', class_=['grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6']).find_all('div', class_='p-6')
