@@ -36,7 +36,7 @@ def get_trendsv2():
     for repo in repo_list:
         title = repo.find('span', class_='truncate').get_text(strip=True)
         link = repo.find('h2', class_='text-xl').find('a').get('href')
-        language = repo.find('span', class_=['px-2', 'py-1', 'bg-gray-100']).get_text(strip=True)
+        language = repo.find('div', class_="relative").find('span').get_text(strip=True)
         description = repo.find('p').get_text(strip=True)
         trends.append({'title': title, 'link': link, 'description': description, 'language': language})
     return trends
