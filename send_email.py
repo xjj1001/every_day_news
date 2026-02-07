@@ -31,12 +31,13 @@ def get_trendsv2():
     response = requests.get(trend_url, headers=headers)
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(response.text, 'html.parser')
-    repo_list = soup.find('div', class_=['grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6']).find_all('div', class_='p-6')
+    repo_list = soup.find('div', class_=['grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6']).find_all('div', class_='bg-white')
     trends = []
     for repo in repo_list:
         title = repo.find('span', class_='truncate').get_text(strip=True)
-        link = repo.find('h2', class_='text-xl').find('a').get('href')
-        language = repo.find('div', class_="relative").find('span').get_text(strip=True)
+        link = repo.find('div', class_='pt-4').find('a').get('href')
+        if link.startswith('/'):
+            link = 'https://github.com' + link[8:]
         description = repo.find('p').get_text(strip=True)
         trends.append({'title': title, 'link': link, 'description': description, 'language': language})
     return trends
