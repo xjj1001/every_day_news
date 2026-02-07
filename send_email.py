@@ -38,6 +38,7 @@ def get_trendsv2():
         link = repo.find('div', class_='pt-4').find('a').get('href')
         if link.startswith('/'):
             link = 'https://github.com' + link[8:]
+        language = repo.find('div', class_="relative").find('span').get_text(strip=True)
         description = repo.find('p').get_text(strip=True)
         trends.append({'title': title, 'link': link, 'description': description, 'language': language})
     return trends
